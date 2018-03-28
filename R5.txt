@@ -1,0 +1,19 @@
+Reference Class:
+
+1. Objects in this paradigm usually have named fields on which the methods operate. In the R implementation, the fields are defined when the class is created. The field itself can optionally have a specified class, meaning that only objects from this class or one of its subclasses can be assigned to the field. By default, fields have class "ANY".
+
+2. fields and methods for the class can be referred to by name in the method definition. The implementation uses R environments to make fields and other methods available by name within the method. Specifically, the parent environment of the method is the object itself. See the section on “Writing Reference Methods”. This special use of environments is optional. If a method is defined with an initial formal argument .self, that will be passed in as the whole object, and the method follows the standard rules for any function in a package. See the section on “External Methods”
+
+3. Alternatively, a method may be an external method. This is signalled by .self being the first formal argument to the method. The body of the method then works like any ordinary function.
+
+4. Fields may be modified in a method by using the non-local assignment operator, <<-, as in the $edit and $undo methods in the example below. Note that non-local assignment is required: a local assignment with the <- operator just creates a local object in the function call, as it would in any R function. When methods are installed, a heuristic check is made for local assignments to field names and a warning issued if any are detected.
+
+5. Reference methods should be kept simple; if they need to do some specialized R computation, that computation should use a separate R function that is called from the reference method. Specifically, methods can not use special features of the enclosing environment mechanism, since the method's environment is used to access fields and other methods.
+
+6. In particular, methods should not use non-exported entries in the package's namespace, because the methods may be inherited by a reference class in another package.
+
+7. Reference methods can not themselves be generic functions; if you want additional function-based method dispatch, write a separate generic function and call that from the method.
+
+8. Declaring the methods this way is essential if the other method is used indirectly (e.g., via sapply() or do.call()). If it is called directly, code analysis will find it.
+
+9. If the first element of the body of the method is a literal character string (possibly multi-line), that string is interpreted as documentation.

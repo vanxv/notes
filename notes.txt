@@ -1,0 +1,13 @@
+1. The difference between load and attach:
+
+There’s an important difference between loading and attaching a package. Normally when you talk about loading a package you think of library(), but that actually attaches the package.
+
+If a package is installed,
+
+Loading will load code, data and any DLLs; register S3 and S4 methods; and run the .onLoad() function. After loading, the package is available in memory, but because it’s not in the search path, you won’t be able to access its components without using ::. Confusingly, :: will also load a package automatically if it isn’t already loaded. It’s rare to load a package explicitly, but you can do so with requireNamespace() or loadNamespace().
+
+Attaching puts the package in the search path. You can’t attach a package without first loading it, so both library() or require() load then attach the package. You can see the currently attached packages with search().
+
+2. The difference between DEPENDS and IMPORTS
+
+Listing a package in either Depends or Imports ensures that it’s installed when needed. The main difference is that where Imports just loads the package, Depends attaches it.
