@@ -1,0 +1,9 @@
+OO in R
+
+1. Thouhg "Everything that exists in R is an object" as captured by John Chambers, not everything is "Object-Oriented". 
+
+2. Use "is.object" to test if an object is a base object or OO object. The primary attribute that distinguish between base and OO object is the "class", use "attribute(XXX, "class")". "class" function is not reliable for this because it falls back to getting base type rather than class.
+
+3. While only OO ojects have a class attribute, every object has a base type.
+
+4. 
