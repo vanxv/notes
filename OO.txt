@@ -4,6 +4,18 @@ OO in R
 
 2. Use "is.object" to test if an object is a base object or OO object. The primary attribute that distinguish between base and OO object is the "class", use "attribute(XXX, "class")". "class" function is not reliable for this because it falls back to getting base type rather than class.
 
-3. While only OO ojects have a class attribute, every object has a base type.
+3. While only OO objects have a class attribute, every object has a base type.
 
-4. 
+4. Base type are relative stable in R because only R-core can create new type. There are 25 different types, loosely grouped into the following groups:
+4.1 the vectors: NULL, logical, integer, double, complex, character, list, raw.
+4.2 Functions: closure (regular R functions), special (internal functions), builtin (primitive functions) and environment.
+4.3 Language components: symbol (aka names), language (usually called calls), pairlist (used for function arguments). “Expression” is a special purpose type that’s only returned by parse() and expression(). They are not needed in user code.
+4.4 There are a few esoteric types that are important for C code but not generally available at the R level: externalptr, weakref, bytecode, S4, promise, “…”, and any.
+
+5  S3 should be your default choice for OO programming: you should use it unless you have a compelling reason otherwise.
+
+6 S3 is very flexible, and even frightening. 
+
+7 S3 methods are functions with a special naming scheme, generic.class().
+
+8 You can find some S3 methods by typing their names. However, this will not work with most packages because S3 methods are not exported: they live only inside the package, and are not available from the global environment. Instead, you can use getS3method(), which will work regardless of where the method lives:
