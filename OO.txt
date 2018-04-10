@@ -19,3 +19,21 @@ OO in R
 7 S3 methods are functions with a special naming scheme, generic.class().
 
 8 You can find some S3 methods by typing their names. However, this will not work with most packages because S3 methods are not exported: they live only inside the package, and are not available from the global environment. Instead, you can use getS3method(), which will work regardless of where the method lives:
+
+9 A digression: POSIXct, POSIXlt and POSIXt
+firstly, ct means calendar time, and lt means local time. However, t just means time probably. But, whatever, POSIXt is just a virtual class inherited by POSIXct and POSIXlt, which facilitate some mixed operation between ct and lt.
+
+So the internal structure difference between POSIXct and POSIXlt is that POSIXct actually contains the (signed) number of seconds since the beginning of 1970 (in the UTC time zone), while POSIXlt is list of vectors with each element representing different component of time, like year, month, day, hour, min, second, and, of course time zone. POSIXct complies the POSIX/C99 construct of "calendar time".
+
+10 Object Style
+S3 gives you the freedom to build a new class on top of any existing base type. So far, we’ve focussed on vector-style where you take an existing vector type and add some attributes. Importantly, a single vector-style object represents multiple values. There are two other important styles: scalar-style (namely list-style) and data-frame-style.
+
+11 s3 classes rely on generics to dispatch a call to the right methods using "UseMethod", which actually dispatch the call according to the naming convention, "generic.class". Thus, one'd better not name a non-method function by including ".".
+
+12 Remember that apart from methods that you’ve created, and those defined in the base package, most S3 methods will not be directly accessible. You’ll need to use getS3method("generic", "class") to see their source code.
+
+13 Methods should always have the same arguments as their generics. This is not usually enforced, but it is good practice because it will avoid confusing behaviour. If you do eventually turn your code into a package, R CMD check will enforce it, so it’s good to get into the habit now. There is one exception to this rule: if the generic has ..., the method must still have all the same arguments (including ...), but can also have its own additional arguments.
+
+14 If you think your coercion function will be frequently used, it’s worth providing a default method that gives a better error message. Default methods are called when no other method is appropriate.
+
+15 Three principles to adhere to when creating a subclass: (a) A subclass should be built on the same base type as a parent. (b) The class attribute of the subclass should be of the form of c(subclass, parent_class). (c) The fields of subclass shoulde include the fields of the parent. And these properties should be enforced by the constructor.
