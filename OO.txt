@@ -36,4 +36,18 @@ S3 gives you the freedom to build a new class on top of any existing base type. 
 
 14 If you think your coercion function will be frequently used, it’s worth providing a default method that gives a better error message. Default methods are called when no other method is appropriate.
 
-15 Three principles to adhere to when creating a subclass: (a) A subclass should be built on the same base type as a parent. (b) The class attribute of the subclass should be of the form of c(subclass, parent_class). (c) The fields of subclass shoulde include the fields of the parent. And these properties should be enforced by the constructor.
+15 Three principles to adhere to when creating a subclass: (a) A subclass should be built on the same base type as a parent. (b) The class attribute of the subclass should be of the form of c(subclass, parent_class). (c) The fields of subclass should include the fields of the parent. And these properties should be enforced by the constructor.
+
+16 methods for the subclasses can reuse the methods of parent classes by calling "NextMethod".
+
+17 The rules for a generic to look for a suitable method: (a) In the calling environment of the function that calls the generic; (b) In the special ".__S3MethodTable__" object in the function environment of the generic, which lists all the S3 methods exported by the package (the package defines the generic).
+
+18 If a non-S3 object (which doesn't have a class attribute) is used to call an S3 generic, the generic will just dispatch it according to a implicit class, inferred from the information like base type and structure.
+
+19 Internal generics: basic operations like "[", "sum", and "cbind", their dispatches are implemented in C code. So before getting ready to extend R base, we should not care about this.
+
+20 Group generics
+Group generics are particularly special because of its dispatching route. 
+Firstly, there are four group: Math, Ops, Summary, and Complex defined in Base R. Likewise, you cannot define a new group because a chain in the dispatching route is implemented in C code (the default method for a group). 
+Secondly, group generics are consulted only if all the methods for the ordinary generic are not hit.
+Last, but not least, you'd better not mess with group generics unless you really have to.
