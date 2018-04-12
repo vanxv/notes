@@ -1,0 +1,58 @@
+1 The difference between load and attach:
+
+There’s an important difference between loading and attaching a package. Normally when you talk about loading a package you think of library(), but that actually attaches the package.
+
+If a package is installed,
+
+Loading will load code, data and any DLLs; register S3 and S4 methods; and run the .onLoad() function. After loading, the package is available in memory, but because it’s not in the search path, you won’t be able to access its components without using ::. Confusingly, :: will also load a package automatically if it isn’t already loaded. It’s rare to load a package explicitly, but you can do so with requireNamespace() or loadNamespace().
+
+Attaching puts the package in the search path. You can’t attach a package without first loading it, so both library() or require() load then attach the package. You can see the currently attached packages with search().
+
+2 There are four functions that make a function available.
+
+       Throw error            Return FALSE
+LOAD loadNamespace("x") requireNamespace("x")
+ATTACH libarary(x) require(x, quietly = TRUE)
+
+Use library(x) in an analysis scripts, but never use it in a package.
+Use requireNamespace("x") in a package if you want a specific action depending on whether the or not a package is installed.
+Never use require(x) or library(x) in package; instead use DEPENDS and IMPORTS in DESCRIPTION file.
+
+3 The difference between DEPENDS and IMPORTS
+
+Listing a package in either Depends or Imports ensures that it’s installed when needed. The main difference is that WHERE Imports just loads the package, Depends attaches it. There's no other difference.
+(Please note the expression "WHERE" here, which means it's not always the case that packages under "Depends" will be attached. Specifically, if you just load (not attach) a package, the depended packages will also be loaded but not attached, and the imported packages won't be loaded; if you attach a package, the depended package will also be attached, and the imported packages are just loaded. In a word, the depended packages will always be in the same status as the depending package; the imported packages will always be in status which is one level lower that the depended packages.)
+You should almost always use IMPORTS, because it introduces the minimal change to the current environment. The exception is that your package is initially designed to work together with another package, i.e., they are just different modules of a bigger function.
+
+4 Use roxygen2 to generate NAMESPACE file and documentation: devtools::document()
+
+5 When you receive an error message which reads "NAMESPACE not created by roxygen2...", just backup the NAMESPACE file and delete it, and re-run the devtools::document() command.
+
+6 RC cannot be extended outside the defining package for now.
+
+7 Data resident in the data/ folder doesn't use the NAMESPACE mechanism to export.
+
+8 Difference between "Imports" in DESCRIPTION and "import" in NAMESPACE
+Firstly, this question arise because it's actually a naming problem: The "Imports" in DESCRIPTION really has nothing to do with functions imported into a NAMESPACE. Instead, it just makes sure that some packages is installed when your package is, and load these packages when your package is attached (neither load nor attach these packages when your package is just loaded but attached). However, NAMESPACE imports an external function so that you don't have to refer to it by "::".
+Secondly, packages under the "Depends" will always keep the same status as your package, (loaded or attached). When a package is attached (added into the search path), you don't have to use :: to call a function in it, even if it is not imported explicitly.
+Thirdly, (therefore), there are generally two ways to bring in an exported function form another package without using ::. (a) Depend the package in DESCRIPTION file; (b) Import the package in DESCRIPTION file and then import the function in NAMESPACE file.
+Last, but not least, actually the most importantly, neither of the above is the recommended way. The recommended way is always use Import in DESCRIPTION file to link to other packages, and always refer to external function by pkg::func because this will cause less conflict and make your code more readable.
+
+9 Principles if you do need to import some functions, methods, or classes
+First of all, there's no doubt that not importing and using :: is the best option.
+Secondly, if you use some certain functions repeatedly, you can import these certain function by @importFrom pkg fun.
+Finally, the least recommended solution is to @import pkg.
+
+10 S3
+S3 generics are just ordinary functions, so the rule above applies to S3 generics too. S3 methods always accompany the generic, so you don't need to do anything about S3 methods.
+
+11 S4
+ @importClassesFrom package ClassA ClassB ...
+ @importMethodsFrom package GenericA GenericB ...
+Because all the S4 related functions are in the "method" package, you need to make sure it's available when you are dealing with S4.
+Although "method" package is always available in the interactive mode, it's not automatically loaded by Rscript, the tool often used to run R from command line, so put this in your DESCRIPTION file:
+Pre R 3.2.0: Depends: methods in DESCRIPTION.
+Post R 3.2.0: Imports: methods in DESCRIPTION.
+If you choose to just import the method package, you need to decide whether to import all the functions by "#' @import methods" or just import important functions by "#' @importFrom methods setClass setGeneric setMethod setRefClass" in the NAMESPACE. It doesn't matter where they go, but if you have package docs, that's a natual place to go.
+
+
