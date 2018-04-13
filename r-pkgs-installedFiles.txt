@@ -1,0 +1,14 @@
+1 When a package is installed, everything in "inst/" is moved one level up to the top-level directory in the package. You are free to put anything into this folder without only one exception that you don't name anything with the existing top-level names in this folder; otherwise, it's gonna override it.
+
+2 You find a file in this folder with "system.file()" if you loaded an existing package or loaded a in-progress package with "devtools::load_all()".
+
+3 inst/CITATION
+citation(), citEntry(), ....
+It tells you how to cite a package.
+
+4 Other scripts language
+inst/python, inst/perl, inst/ruby 
+also add SystemRequirements field in the DESCRIPTION. (This field is for human reading so don’t worry about exactly how you specify it.)
+
+5 Java is a special case because you need to include both the source code (which should go in java/ and be listed in .Rinstignore), and the compiled jar files (which should go in inst/java). Make sure to add rJava to Imports.
+

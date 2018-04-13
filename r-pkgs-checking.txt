@@ -1,0 +1,10 @@
+1 R CMD check
+Run it after every change you made to your package.
+
+2 Learn about "Travis-CI" in the future.
+
+3 Instead, run devtools::check(), or press Ctrl/Cmd + Shift + E in RStudio.
+Ensures that the documentation is up-to-date by running devtools::document().
+Bundles the package before checking it. This is the best practice for checking packages because it makes sure the check starts with a clean slate: because a package bundle doesn’t contain any of the temporary files that can accumulate in your source package, e.g. artifacts like .so and .o files which accompany compiled code, you can avoid the spurious warnings such files will generate.
+Sets the NOT_CRAN environment variable to TRUE. This allows you to selectively skip tests on CRAN. (See ?testthat::skip_on_cran for details.)
+
