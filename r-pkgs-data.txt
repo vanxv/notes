@@ -1,0 +1,39 @@
+1 There are three way to include data in your package.
+If you want to store binary data and make it available to the user, put it in data/. This is the best place to put example datasets.
+If you want to store parsed data, but not make it available to the user, put it in R/sysdata.rda. This is the best place to put data that your functions need.
+If you want to store raw data, put it in inst/extdata.
+A simple alternative to these three options is to include it in the source of your package, either creating by hand, or using dput() to serialise an existing data set into R code.
+
+2 data/
+Each file in this directory should be a ".RData" file created by save() containing a single object with the same name as the file. The easiest way to adhere to these rules is to use "devtools::use_data".
+There is a switch in DESCRIPTION file called "LazyData" to determine if these data are loaded lazily.
+
+3 To generate file in data/
+"devtools::use_data_raw" can help generate data in "data/". In this case, you should put the code for data clean in "data-raw/", and add this folder into "/RbuildIgnore".
+
+4 Export and Document data
+Data are exported differently than NAMESPACE, but the details are not important. (hehe...). And never @export a data set.
+To document a data set, use a R script file in "R/", as the following (diamonds is the name for the data set):
+#' Prices of 50,000 round cut diamonds.
+#'
+#' A dataset containing the prices and other attributes of almost 54,000
+#' diamonds.
+#'
+#' @format A data frame with 53940 rows and 10 variables:
+#' \describe{
+#'   \item{price}{price, in US dollars}
+#'   \item{carat}{weight of the diamond, in carats}
+#'   ...
+#' }
+#' @source \url{http://www.diamondse.info/}
+"diamonds"
+
+5 Internal data
+devtools::use_data(x, mtcars, internal = TRUE)
+R/sysdata.rda are not exported (they shouldn’t be), so they don’t need to be documented. They’re only available inside your package.
+Again, to make this data reproducible it’s a good idea to include the code used to generate it. Put it in data-raw/.
+
+6 Raw data
+Put the original files in "inst/extdata". When the package is installed, all the file and folders in "inst/" are moved one level up to the top directory. Use system.file to load the data:
+system.file("extdata", "2012.csv", package = "testdat")
+system.file("extdata", "2010.csv", package = "testdat", mustWork = TRUE) (report error rather than keep silient)
