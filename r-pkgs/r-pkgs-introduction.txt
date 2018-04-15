@@ -1,0 +1,10 @@
+1 You get help on packages with package?x and help(package = "x")
+
+2 Devtools works hand-in-hand with RStudio.
+
+3 The best resource for the official details of package development is always the official writing R extensions manual. When you think you are familair enough with the package development, you can refer to this official document, because it's readlly hard to underastand.
+
+4 Function documentation describes the nitpicky details of every function in your package, while vignette gives a big picture. They are long-form documentations that combine multiple parts of your package to solve real problems.
+
+5 Colophon
+This book was written in Rmarkdown inside RStudio. knitr and pandoc converted the raw Rmarkdown to html and pdf. The website was made with jekyll, styled with bootstrap, and automatically published to Amazon’s S3 by travis-ci. The complete source is available from github.

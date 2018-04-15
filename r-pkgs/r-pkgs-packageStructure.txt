@@ -1,0 +1,23 @@
+1 requirement for a package name
+There are three formal requirements: the name can only consist of letters, numbers and periods, i.e., .; it must start with a letter; and it cannot end with a period. Unfortunately, this means you can’t use either hyphens or underscores, i.e., - or _, in your package name. I recommend against using periods in package names because it has confusing connotations (i.e., file extension or S3 method).
+
+2 The smallest usable package with three components: R, DESCRIPTION, and NAMESPACE.
+
+3 Five states a package can be in across its lifecycle: source, bundled, binary, installed, and in-memory.
+
+4 While a bundle is not that useful on its own, it’s a useful intermediary between the other states. In the rare case that you do need a bundle, call devtools::build() to make it.
+
+5 The differences between an uncompressed bundle and a source package
+Vignettes are built so that you get HTML and PDF output instead of Markdown or LaTeX input.
+Your source package might contain temporary files used to save time during development, like compilation artefacts in src/. These are never found in a bundle.
+Any files listed in .Rbuildignore are not included in the bundle.
+
+6 Binary packages are platform specific: you can’t install a Windows binary package on a Mac or vice versa. Also, while Mac binary packages end in .tgz, Windows binary packages end in .zip. You can use devtools::build(binary = TRUE) to make a binary package.
+
+7 An installed package is just a binary package that’s been decompressed into a package library.
+
+8 You can prevent files in the package bundle from being included in the installed package using .Rinstignore. This works the same way as .Rbuildignore, described above. It’s rarely needed.
+
+9 devtools::load_all() directly change the state of a pakcage from source to in-momery.
+
+10 
