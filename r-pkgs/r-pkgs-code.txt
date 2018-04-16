@@ -1,1 +1,22 @@
-1 
+1 The difference between code in scripts and code in packages
+In a script, code is run when it is loaded. In a package, code is run when it is built. This means your package code should only create objects, the vast majority of which will be functions.
+
+2 When you load a script with source(), every line of code is executed and the results are immediately made available. Things are different in a package, because it is loaded in two steps. When the package is built (e.g. by CRAN) all the code in R/ is executed and the results are saved. When you load a package, with library() or require(), the cached results are made available to you. If you loaded scripts in the same way as packages, your code would look like this:
+# Load a script into a new environment and save it
+env <- new.env(parent = emptyenv())
+source("my-script.R", local = env)
+save(envir = env, "my-script.Rdata")
+# Later, in another R session
+load("my-script.Rdata")
+
+3 This means that you should never run code at the top-level of a package: package code should only create objects, mostly functions. For example, "library(ggplot2)", and you will use ggplot2 function in the following code. The code "library(ggplot2)" should never appear in the package code, because this line will only be run when building, and when the package is installed, it won't be run again, and thus the following code using related function won't work. You can get around this problem by putting this line in the function body, but it's usually not recommended, because it will introducing side-effect when executing the function. Instead, you should declare the dependency in DESCRIPTION file.
+
+4 Side-effect to R landscape
+search path, loaded objects, working directory, global options, creating plots and printing output to the console.
+
+5 When you do need side-effects, like initial setups: use .onLoad() and .onAttach().Those are called when the package is loaded and attached. And also, use onUnload to clean up any side-effects.
+
+6 If you want to submit pakcages to CRAN, you should only use ASCII characters. But you can still use unicode characters by the special escape "\u1234" format. Try this "stringi::stri_escape_unicode()".
+
+ 
+

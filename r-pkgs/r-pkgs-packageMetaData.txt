@@ -1,0 +1,30 @@
+1 Dependency Management: Depends, Imports, and Suggests
+These three fields differs in their strength of dependency.
+"Depends" is the strongest one. Packages will be installed together with your package, and always be kept in the same state as your package (simultaneously installed, loaded, and attached).
+"Imports" is the second strongest one. Installed together. If your package is loaded, these packages are not loaded. Your package is attached, these packages are loaded.
+"Suggests" is the weakest one. Not installed along with your package. You need to check the state of these package yourself by "loadNamespace" or "requireNamespace".
+
+2 Best practice: use Imports as possible and refer to externals by "pkg::func". And ONLY R appears in the "Depends" field as possible.
+
+3 Version of dependents: best to specify the minimum version.
+
+4 LinkingTo: packages listed here rely on C or C++ code in another package.
+
+5 Enhances: a reverse of "Suggests". Not recommended to use.
+
+6 List things that you package need outside R in the SystemRequirements. This is currently a plain text field and is not automatically checked.
+
+7 Version of your package
+An R package version is a sequence of at least two integers separated by either . or -.
+Best Practice: <major>.<minor>.<patch> like 1.0.0 for release version; <major>.<minor>.<patch>.<in-development-version> for in-development package, where in-development-version starts with 9000.
+Therefore, the first version of you package is 0.0.0.9000
+
+8 "Collate" controls the order in which R files are sourced. By default, it is in alphabetical order.
+
+9 "LazyData" controls if the data contained in data folder are loaded lazily.
+
+10 You can also create your own fields to add additional metadata.
+ 
+
+
+
