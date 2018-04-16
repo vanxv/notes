@@ -1,0 +1,36 @@
+1 Object documentation is what you get when you call ? XXX or help().
+
+2 It works like a dictionary, opposite to vignette.
+
+3 They reside in the ".Rd" file in the "man/" folder.
+
+4 While you can write the ".Rd" file yourself, roxygen2 makes it easier by formatting comment into ".Rd" files.
+
+5 Two workflow to write documentation
+In the first workflow, you can use devtools::document() (which calls roxygen2 to do the hard work) to generate ".Rd" files. Now, you can preview the documentation with ? or help.
+In the second workflow, build&reload the package, and then preview the documentation. This needs some configuration.
+The difference is that the second will show the links between packages.
+
+6 Roxygen comments: TEXT part
+Each block includes some TEXT before the first tag.1 This is called the introduction, and is parsed specially:
+The first sentence becomes the title of the documentation. That’s what you see when you look at help(package = mypackage) and is shown at the top of each help file. It should fit on one line, be written in sentence case, but not end in a full stop.
+The second paragraph is the description: this comes first in the documentation and should briefly describe what the function does.
+The third and subsequent paragraphs go into the details: this is a (often long) section that is shown after the argument description and should go into detail about how the function works.
+
+7 Roxygen comments: @section
+You can add arbitrary sections to the documentation with the @section tag. This is a useful way of breaking a long details section into multiple chunks with useful headings. Section titles should be in sentence case, must be followed by a colon, and they can only be one line long.
+#' @section Warning:
+#' Do not operate heavy machinery within 8 hours of using this function.
+
+8 Roxygen comments: @seealso and @family
+#' @family aggregate functions
+#' @seealso \code{\link{prod}} for products, \code{\link{cumsum}} for cumulative
+#'   sums, and \code{\link{colSums}}/\code{\link{rowSums}} marginal sums over
+#'   high-dimensional arrays.
+
+9 Roxygen comments: @aliases and @ keywords
+@aliases alias1 alias2 ... adds additional aliases to the topic. An alias is another name for the topic that can be used with ?.
+@keywords keyword1 keyword2 ... adds standardised keywords. Keywords are optional, but if present, must be taken from a predefined list found in file.path(R.home("doc"), "KEYWORDS").
+Generally, keywords are not that useful except for @keywords internal. Using the internal keyword removes the function from the package index and disables some of its automated tests. It’s common to use @keywords internal for functions that are of interest to other developers extending your package, but not most users.
+
+10 Documenting functions
