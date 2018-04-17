@@ -59,5 +59,70 @@ NULL
 I usually put this documentation in a file called <package-name>.R. It’s also a good place to put the package level import statements that you’ll learn about in imports.
 
 12 Documenting S3
- 
+S3 generics are regular functions, so document them as such. S3 classes have no formal definition, so document the constructor function. It is your choice whether or not to document S3 methods.
+@method generic class tags for all S3 methods: From version 3.0.0 onward, this is no longer needed as roxygen2 will figure it out automatically. Automatic method detection will only fail if the generic and class are ambiguous. For example is all.equal.data.frame() the equal.data.frame method for all, or the data.frame method for all.equal?. If this happens, you can disambiguate with e.g. @method all.equal data.frame.
+
+13 Documenting S4
+Please study the S4 part in "Advanced R" before getting into this part.
+
+14 Documenting RC
+#' A Reference Class to represent a bank account.
+#'
+#' @field balance A length-one numeric vector.
+Account <- setRefClass("Account",
+  fields = list(balance = "numeric"),
+  methods = list(
+    withdraw = function(x) {
+      "Withdraw money from account. Allows overdrafts"
+      balance <<- balance - x
+    }
+  )
+)
+docstring: Methods with doc strings will be included in the “Methods” section of the class documentation. Each documented method will be listed with an automatically generated usage statement and its doc string.
+
+15 Special character
+@ -> @@
+% -> \%
+\ -> \\
+
+16 @inheritParams
+#' @param a This is the first argument
+foo <- function(a) a + 10
+#' @param b This is the second argument
+#' @inheritParams foo
+bar <- function(a, b) {
+  foo(a) * 10
+}
+
+17 @describeIn
+@describeIn is designed for the most common cases:
+Documenting methods in a generic.
+Documenting methods in a class.
+Documenting functions with the same (or similar) arguments.
+
+18 @rdname
+There are two ways to use @rdname. You can add documentation to an existing function:
+#' Basic arithmetic
+#'
+#' @param x,y numeric vectors.
+add <- function(x, y) x + y
+
+#' @rdname add
+times <- function(x, y) x * y
+
+Or, you can create a dummy documentation file by documenting NULL and setting an informative @name.
+
+#' Basic arithmetic
+#'
+#' @param x,y numeric vectors.
+#' @name arith
+NULL
+
+#' @rdname arith
+add <- function(x, y) x + y
+
+#' @rdname arith
+times <- function(x, y) x * y
+
+19 Formatting: Within roxygen tags, you use .Rd syntax to format text.
 

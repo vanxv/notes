@@ -1,0 +1,71 @@
+1 Many existing packages have vignettes. You can see all the installed vignettes with browseVignettes(). To see the vignette for a specific package, use the argument, browseVignettes("packagename"). Each vignette provides three things: the original source file, a readable HTML page or PDF, and a file of R code. You can read a specific vignette with vignette(x), and see its code with edit(vignette(x)). 
+
+2 Each vignette provides three things: the original source file, a readable HTML page or PDF, and a file of R code.
+
+3 In this chapter, we’re going to use the R markdown vignette engine provided by knitr.
+
+4 devtools::use_vignette("my-vignette")
+This will:
+Create a vignettes/ directory.
+Add the necessary dependencies to DESCRIPTION (i.e. it adds knitr to the Suggests and VignetteBuilder fields).
+Draft a vignette, vignettes/my-vignette.Rmd.
+Once you have this file, the workflow is straightforward:
+Modify the vignette.
+Press Ctrl/Cmd + Shift + K (or click ) to knit the vignette and preview the output.
+
+5 Metadata
+Metadata is written in yaml. ">" indicates that the following lines of text are plain text, and shouldn't use any special yaml features. The date is filled in by default: it uses a special knitr syntax (explained below) to insert today’s date.
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+Output: this tells rmarkdown which output formatter to use. There are many options that are useful for regular reports (including html, pdf, slideshows, …) but rmarkdown::html_vignette has been specifically designed to work well inside packages.
+
+6 Markdown
+http://daringfireball.net/projects/markdown/syntax
+http://pandoc.org/MANUAL.html
+
+7 Sections
+Headings are identified by #:
+# Heading 1
+## Heading 2
+### Heading 3
+Create a horizontal rule with three or more hyphens (or asterisks):
+--------
+********
+
+8 Lists
+Basic unordered lists use *:
+* Bulleted list
+* Item 2
+    * Nested bullets need a 4-space indent.
+    * Item 2b
+If you want multiparagraph lists, the second and subsequent paragraphs need additional indenting:
+  * It's possible to put multiple paragraphs of text in a list item. 
+
+    But to do that, the second and subsequent paragraphs must be
+    indented by four or more spaces. It looks better if the first
+    bullet is also indented.
+Ordered lists use: 1.:
+1. Item 1
+1. Item 2
+1. Items are numbered automatically, even though they all start with 1.
+You can intermingle ordered and bulleted lists, as long as you adhere to the four space rule:
+1.  Item 1.
+    *  Item a
+    *  Item b
+1.  Item 2.
+
+9 Inline formatting
+_italic_ or *italic*
+__bold__ or **bold**    
+[link text](destination)
+<http://this-is-a-raw-url.com>
+
+10 Table
