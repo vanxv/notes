@@ -69,3 +69,51 @@ __bold__ or **bold**
 <http://this-is-a-raw-url.com>
 
 10 Table
+| Right | Left | Default | Center |
+|------:|:-----|---------|:------:|
+|   12  |  12  |    12   |    12  |
+|  123  |  123 |   123   |   123  |
+|    1  |    1 |     1   |     1  |
+
+11 Code
+For inline code use `code`.
+For bigger blocks of code, use ```. These are known as “fenced” code blocks:
+```
+# A comment
+add <- function(a, b) a + b
+```
+To add syntax highlighting to the code, put the language name after the backtick:
+```c
+int add(int a, int b) {
+  return a + b;
+}
+```
+When you include R code in your vignette, you usually won’t use ```r. Instead, you’ll use ```{r}, which is specially processed by knitr, as described next.
+
+12 Knitr
+Knitr allows you to intermingle code, results and text. Knitr takes R code, runs it, captures the output, and translates it into formatted Markdown.
+Once you start using knitr, you’ll never look back. Because your code is always run when you build the vignette, you can rest assured knowing that all your code works.
+
+13 Options
+You can specify additional options to control the rendering:
+To affect a single block, add the block settings:
+```{r, opt1 = val1, opt2 = val2}
+# code
+```
+To affect all blocks, call knitr::opts_chunk$set() in a knitr block:
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  opt1 = val1,
+  opt2 = val2
+)
+```
+
+13 Development cycle: some ways to build just ignore vignette to save time. Make sure you choose the right command.
+Run code a chunk at a time using Cmd + Alt + C. Re-run the entire document in a fresh R session using Knit (Ctrl/Cmd + Shift + K).
+You can build all vignettes from the console with devtools::build_vignettes(), but this is rarely useful. Instead use devtools::build() to create a package bundle with the vignettes included. RStudio’s “Build & reload” does not build vignettes to save time. Similarly, devtools::install_github() (and friends) will not build vignettes by default because they’re time consuming and may require additional packages. You can force building with devtools::install_github(build_vignettes = TRUE). This will also install all suggested packages.
+
+14 Organisation
+Although it’s a slight hack, you can link various vignettes by taking advantage of how files are stored on disk: to link to vignette abc.Rmd, just make a link to abc.html.
+
+15 CRAN doesn't re-build the vignette, but just check that the code is runnable.

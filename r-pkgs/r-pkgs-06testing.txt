@@ -1,0 +1,17 @@
+1 Test workflow
+devtools::use_testthat(): (a)Create a tests/testthat directory. (b)Adds testthat to the Suggests field in the DESCRIPTION. (c) Creates a file tests/testthat.R that runs all your tests when R CMD check runs. (You’ll learn more about that in automated checking.)
+devtools::test(): run test cases.
+
+2 Test structure
+expectations -> tests -> test files in "tests/testthat/"
+
+3 Expectations
+Many existing expectations come with the testthat package. But you can also customize your own test case throught "expect(...)".
+
+4 Writing tests
+Each test is run in its own environment and is self-contained. However, testthat doesn’t know how to cleanup after actions that affect the R landscape: (a)The filesystem: creating and deleting files, changing the working directory, etc. (b)The search path: library(), attach(). (c)Global options, like options() and par().
+When you use these actions in tests, you’ll need to clean up after yourself.
+
+5 Use "skip()" to skip a test
+
+6 CRAN will run your tests on all CRAN platforms: Windows, Mac, Linux and Solaris in the English language (LANGUAGE=EN) and with C sort order (LC_COLLATE=C).  Use skip_on_cran() for long-running tests.
