@@ -25,3 +25,4 @@ Reference Class:
 12. Class fields are inherited. A class definition can override a field of the same name in a superclass only if the overriding class is a subclass of the class of the inherited field. This ensures that a valid object in the field remains valid for the superclass as well.
 
 13. Typically, a specialized $initialize() method carries out its own computations, then invokes $initFields() to perform standard initialization, as shown in the matrixViewer class in the example below.
+
